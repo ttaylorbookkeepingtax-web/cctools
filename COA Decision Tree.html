@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Commerce Counts · Ecommerce COA Decision Tree</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7fb;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    .tree-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px 24px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      border-top: 4px solid #0f766e; /* teal accent */
+    }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+    .brand-text-main {
+      font-size: 22px;
+      font-weight: 700;
+      color: #14532d; /* deep green */
+      line-height: 1.1;
+    }
+    .brand-text-sub {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #b45309; /* gold-ish */
+    }
+    .brand-tagline {
+      font-size: 11px;
+      color: #4b5563;
+      text-align: right;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 10px 0 4px;
+      color: #111827;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+    .question {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      border-radius: 999px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #ecfdf5;
+      border-color: #0f766e;
+      color: #064e3b;
+    }
+    .btn-primary {
+      background: #0f766e;
+      border-color: #0f766e;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #0d5f59;
+    }
+    .answer-card {
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 4px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .answer-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .account-line {
+      margin: 2px 0;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      margin-left: 4px;
+    }
+    .channel-tag {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fefce8;
+      color: #92400e;
+      margin-bottom: 8px;
+      border: 1px solid #fde68a;
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .nav-row .left {
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .hidden {
+      display: none;
+    }
+    .footer-note {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 12px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="tree-container">
+    <div class="brand-header">
+      <div class="brand-left">
+        <!-- Make sure this filename matches the logo in the same folder -->
+        <img src="Commerce Counts logo.png" alt="Commerce Counts logo" class="brand-logo">
+        <div>
+          <div class="brand-text-main">Commerce Counts</div>
+          <div class="brand-text-sub">BOOKKEEPING &amp; TAX</div>
+        </div>
+      </div>
+      <div class="brand-tagline">
+        Ecommerce COA · Multi‑channel<br>
+        Amazon · eBay · Shopify · Walmart · Etsy
+      </div>
+    </div>
+
+    <h1>“Where does this transaction go?”</h1>
+    <div class="subtitle">
+      QuickBooks‑ready decision tree for multi‑channel ecommerce bookkeeping.
+    </div>
+
+    <div id="pill" class="pill"></div>
+
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+
+    <div id="answerCard" class="answer-card hidden">
+      <div class="answer-label">Suggested QuickBooks setup</div>
+      <div id="answerContent"></div>
+    </div>
+
+    <div class="nav-row">
+      <div class="left" id="breadcrumbs"></div>
+      <div>
+        <button class="btn" id="backBtn">Back</button>
+        <button class="btn btn-primary" id="restartBtn">Start over</button>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Created by Commerce Counts · This tool is educational and not tax or legal advice.
+    </div>
+  </div>
+
+  <script>
+    const tree = {
+      id: "start",
+      label: "Got a transaction?",
+      pill: "Step 1 · Start",
+      options: [
+        { label: "Yes", next: "moneyDirection" }
+      ]
+    };
+
+    const nodes = {
+      moneyDirection: {
+        id: "moneyDirection",
+        label: "Is money coming in or going out?",
+        pill: "Step 2 · Direction",
+        options: [
+          { label: "Money coming IN", next: "incomeSource" },
+          { label: "Money going OUT", next: "costType" }
+        ]
+      },
+
+      incomeSource: {
+        id: "incomeSource",
+        label: "Is this from a sales channel (order / payout) or something else?",
+        pill: "Income · Source",
+        options: [
+          { label: "Sales channel (Amazon, eBay, Shopify, Walmart, Etsy, Other)", next: "whichChannel" },
+          { label: "Other money (loan, owner money, interest, refund from vendor)", next: "otherIncomeType" }
+        ]
+      },
+
+      whichChannel: {
+        id: "whichChannel",
+        label: "Which sales channel is this transaction from?",
+        pill: "Income · Channel",
+        options: [
+          { label: "Amazon", next: "incomeAmazonType" },
+          { label: "eBay", next: "incomeEbayType" },
+          { label: "Shopify", next: "incomeShopifyType" },
+          { label: "Walmart", next: "incomeWalmartType" },
+          { label: "Etsy", next: "incomeEtsyType" },
+          { label: "Other channel", next: "incomeOtherChannelType" }
+        ]
+      },
+
+      incomeAmazonType: {
+        id: "incomeAmazonType",
+        label: "What part of the Amazon transaction is this?",
+        pill: "Income · Amazon",
+        options: [
+          { label: "Product sale amount", next: "leafAmazonRevenue" },
+          { label: "Shipping charged to customer", next: "leafShippingIncome" },
+          { label: "Sales tax collected", next: "leafSalesTax" },
+          { label: "Platform promo / fee refund", next: "leafPlatformCredit" },
+          { label: "Net payout to bank", next: "leafAmazonPayout" }
+        ]
+      },
+      incomeEbayType: {
+        id: "incomeEbayType",
+        label: "What part of the eBay transaction is this?",
+        pill: "Income · eBay",
+        options: [
+          { label: "Product sale amount", next: "leafEbayRevenue" },
+          { label: "Shipping charged to customer", next: "leafShippingIncome" },
+          { label: "Sales tax collected", next: "leafSalesTax" },
+          { label: "Platform promo / fee refund", next: "leafPlatformCredit" },
+          { label: "Net payout to bank", next: "leafEbayPayout" }
+        ]
+      },
+      incomeShopifyType: {
+        id: "incomeShopifyType",
+        label: "What part of the Shopify transaction is this?",
+        pill: "Income · Shopify",
+        options: [
+          { label: "Product sale amount", next: "leafShopifyRevenue" },
+          { label: "Shipping charged to customer", next: "leafShippingIncome" },
+          { label: "Sales tax collected", next: "leafSalesTax" },
+          { label: "Platform promo / fee refund", next: "leafPlatformCredit" },
+          { label: "Net payout to bank", next: "leafShopifyPayout" }
+        ]
+      },
+      incomeWalmartType: {
+        id: "incomeWalmartType",
+        label: "What part of the Walmart transaction is this?",
+        pill: "Income · Walmart",
+        options: [
+          { label: "Product sale amount", next: "leafWalmartRevenue" },
+          { label: "Shipping charged to customer", next: "leafShippingIncome" },
+          { label: "Sales tax collected", next: "leafSalesTax" },
+          { label: "Platform promo / fee refund", next: "leafPlatformCredit" },
+          { label: "Net payout to bank", next: "leafWalmartPayout" }
+        ]
+      },
+      incomeEtsyType: {
+        id: "incomeEtsyType",
+        label: "What part of the Etsy transaction is this?",
+        pill: "Income · Etsy",
+        options: [
+          { label: "Product sale amount", next: "leafEtsyRevenue" },
+          { label: "Shipping charged to customer", next: "leafShippingIncome" },
+          { label: "Sales tax collected", next: "leafSalesTax" },
+          { label: "Platform promo / fee refund", next: "leafPlatformCredit" },
+          { label: "Net payout to bank", next: "leafEtsyPayout" }
+        ]
+      },
+      incomeOtherChannelType: {
+        id: "incomeOtherChannelType",
+        label: "What part of the Other channel transaction is this?",
+        pill: "Income · Other channel",
+        options: [
+          { label: "Product sale amount", next: "leafOtherChannelRevenue" },
+          { label: "Shipping charged to customer", next: "leafShippingIncome" },
+          { label: "Sales tax collected", next: "leafSalesTax" },
+          { label: "Platform promo / fee refund", next: "leafPlatformCredit" }
+        ]
+      },
+
+      otherIncomeType: {
+        id: "otherIncomeType",
+        label: "What type of other money is this?",
+        pill: "Income · Other",
+        options: [
+          { label: "Owner / investor money in", next: "leafOwnerContribution" },
+          { label: "Loan funds received", next: "leafLoanFunds" },
+          { label: "Bank interest income", next: "leafInterestIncome" },
+          { label: "Refund from a vendor", next: "leafVendorRefund" }
+        ]
+      },
+
+      costType: {
+        id: "costType",
+        label: "Is this cost directly tied to fulfilling customer orders?",
+        pill: "Costs · COGS vs Expense",
+        options: [
+          { label: "Yes, it’s directly tied to orders", next: "cogsType" },
+          { label: "No, it’s more of an overhead / operating cost", next: "opexType" }
+        ]
+      },
+
+      cogsType: {
+        id: "cogsType",
+        label: "What type of direct (COGS) cost is this?",
+        pill: "Costs · COGS",
+        options: [
+          { label: "Buying inventory / product", next: "leafInventoryCOGS" },
+          { label: "Marketplace fees (Amazon, eBay, Walmart, Etsy)", next: "leafMarketplaceFeesCOGS" },
+          { label: "Shopify / payment processing fees per order", next: "leafProcessingFeesCOGS" },
+          { label: "Shipping labels / FBA / 3PL tied to orders", next: "leafShippingCOGS" }
+        ]
+      },
+
+      opexType: {
+        id: "opexType",
+        label: "What type of operating expense is this?",
+        pill: "Costs · Operating",
+        options: [
+          { label: "Software or app subscription", next: "leafSoftwareExpense" },
+          { label: "Advertising & marketing", next: "leafAdsExpense" },
+          { label: "General overhead (rent, utilities, office, insurance)", next: "leafOverheadExpense" },
+          { label: "Professional services (bookkeeper, tax, legal)", next: "leafProfessionalExpense" }
+        ]
+      }
+    };
+
+    const leaves = {
+      leafAmazonRevenue: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Amazon</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use: <strong>4100 Amazon Revenue</strong><span class="tag">Account Type: Income</span>
+          </div>
+        `
+      },
+      leafEbayRevenue: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>eBay</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use: <strong>4110 eBay Revenue</strong><span class="tag">Account Type: Income</span>
+          </div>
+        `
+      },
+      leafShopifyRevenue: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Shopify</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use: <strong>4120 Shopify Revenue</strong><span class="tag">Account Type: Income</span>
+          </div>
+        `
+      },
+      leafWalmartRevenue: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Walmart</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use: <strong>4130 Walmart Revenue</strong><span class="tag">Account Type: Income</span>
+          </div>
+        `
+      },
+      leafEtsyRevenue: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Etsy</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use: <strong>4140 Etsy Revenue</strong><span class="tag">Account Type: Income</span>
+          </div>
+        `
+      },
+      leafOtherChannelRevenue: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Other channel</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use: <strong>4190 Other Channel Revenue</strong><span class="tag">Account Type: Income</span>
+          </div>
+        `
+      },
+
+      leafShippingIncome: {
+        text: `
+          <div class="account-line">
+            Use: <strong>4200 Shipping Income</strong><span class="tag">Account Type: Income</span>
+          </div>
+          <div class="account-line">
+            Note: For shipping amounts you charge customers on any channel.
+          </div>
+        `
+      },
+      leafSalesTax: {
+        text: `
+          <div class="account-line">
+            Use: <strong>2300 Sales Tax Payable</strong><span class="tag">Account Type: Other Current Liability</span>
+          </div>
+          <div class="account-line">
+            Note: For sales tax collected that you owe to tax agencies.
+          </div>
+        `
+      },
+      leafPlatformCredit: {
+        text: `
+          <div class="account-line">
+            Use: <strong>4300 Other Platform Income</strong><span class="tag">Account Type: Other Income</span>
+          </div>
+          <div class="account-line">
+            Note: Fee reversals, promo credits, or similar from sales channels.
+          </div>
+        `
+      },
+
+      leafAmazonPayout: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Amazon</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use clearing account: <strong>1105 Amazon Clearing</strong><span class="tag">Account Type: Bank</span>
+          </div>
+          <div class="account-line">
+            Map gross sales, fees, and tax to detailed accounts; net payout moves from 1105 to your real bank account.
+          </div>
+        `
+      },
+      leafEbayPayout: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>eBay</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use clearing account: <strong>1106 eBay Clearing</strong><span class="tag">Account Type: Bank</span>
+          </div>
+        `
+      },
+      leafShopifyPayout: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Shopify</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use clearing account: <strong>1107 Shopify Payments Clearing</strong><span class="tag">Account Type: Bank</span>
+          </div>
+        `
+      },
+      leafWalmartPayout: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Walmart</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use clearing account: <strong>1108 Walmart Clearing</strong><span class="tag">Account Type: Bank</span>
+          </div>
+        `
+      },
+      leafEtsyPayout: {
+        text: `
+          <div class="account-line">
+            Channel: <strong>Etsy</strong><span class="tag channel-tag">Channel</span>
+          </div>
+          <div class="account-line">
+            Use clearing account: <strong>1109 Etsy Clearing</strong><span class="tag">Account Type: Bank</span>
+          </div>
+        `
+      },
+
+      leafOwnerContribution: {
+        text: `
+          <div class="account-line">
+            Use: <strong>3000 Owner Contribution</strong><span class="tag">Account Type: Equity</span>
+          </div>
+        `
+      },
+      leafLoanFunds: {
+        text: `
+          <div class="account-line">
+            Use: <strong>2100 Loan Payable – Lender</strong><span class="tag">Account Type: Long Term Liability</span>
+          </div>
+        `
+      },
+      leafInterestIncome: {
+        text: `
+          <div class="account-line">
+            Use: <strong>4400 Interest Income</strong><span class="tag">Account Type: Other Income</span>
+          </div>
+        `
+      },
+      leafVendorRefund: {
+        text: `
+          <div class="account-line">
+            Use: <strong>4500 Vendor Refunds</strong><span class="tag">Account Type: Other Income</span>
+          </div>
+          <div class="account-line">
+            Or net against the original expense account if preferred.
+          </div>
+        `
+      },
+
+      leafInventoryCOGS: {
+        text: `
+          <div class="account-line">
+            Use: <strong>5000 Cost of Goods Sold – Product</strong><span class="tag">Account Type: Cost of Goods Sold</span>
+          </div>
+        `
+      },
+      leafMarketplaceFeesCOGS: {
+        text: `
+          <div class="account-line">
+            Use (examples):<br>
+            <strong>5100 Amazon Referral Fees</strong>,<br>
+            <strong>5120 eBay Marketplace Fees</strong>,<br>
+            <strong>5130 Walmart Marketplace Fees</strong>,<br>
+            <strong>5140 Etsy Marketplace Fees</strong><span class="tag">Account Type: Cost of Goods Sold</span>
+          </div>
+        `
+      },
+      leafProcessingFeesCOGS: {
+        text: `
+          <div class="account-line">
+            Use: <strong>5110 Shopify Processing Fees</strong><span class="tag">Account Type: Cost of Goods Sold</span>
+          </div>
+          <div class="account-line">
+            Or create similar accounts for other processors if needed.
+          </div>
+        `
+      },
+      leafShippingCOGS: {
+        text: `
+          <div class="account-line">
+            Use: <strong>5200 Shipping & Fulfillment – COGS</strong><span class="tag">Account Type: Cost of Goods Sold</span>
+          </div>
+        `
+      },
+
+      leafSoftwareExpense: {
+        text: `
+          <div class="account-line">
+            Use: <strong>6100 Software Subscriptions</strong><span class="tag">Account Type: Expense</span>
+          </div>
+        `
+      },
+      leafAdsExpense: {
+        text: `
+          <div class="account-line">
+            Use: <strong>6200 Advertising & Marketing</strong><span class="tag">Account Type: Expense</span>
+          </div>
+          <div class="account-line">
+            Optional sub‑accounts: 6201 Amazon Advertising, 6202 Meta Ads, etc.
+          </div>
+        `
+      },
+      leafOverheadExpense: {
+        text: `
+          <div class="account-line">
+            Examples:<br>
+            6300 Rent, 6310 Utilities, 6320 Office Supplies, 6330 Insurance<span class="tag">Account Type: Expense</span>
+          </div>
+        `
+      },
+      leafProfessionalExpense: {
+        text: `
+          <div class="account-line">
+            Use: <strong>6400 Accounting & Bookkeeping</strong> and <strong>6410 Legal & Professional</strong><span class="tag">Account Type: Expense</span>
+          </div>
+        `
+      }
+    };
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const pillEl = document.getElementById("pill");
+    const answerCardEl = document.getElementById("answerCard");
+    const answerContentEl = document.getElementById("answerContent");
+    const backBtn = document.getElementById("backBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const breadcrumbsEl = document.getElementById("breadcrumbs");
+
+    let history = ["start"];
+
+    function getCurrentNodeId() {
+      return history[history.length - 1];
+    }
+
+    function render() {
+      const nodeId = getCurrentNodeId();
+
+      if (nodeId.startsWith("leaf")) {
+        const leaf = leaves[nodeId];
+        questionEl.textContent = "Result";
+        optionsEl.innerHTML = "";
+        pillEl.textContent = "Suggested account";
+        answerCardEl.classList.remove("hidden");
+        answerContentEl.innerHTML = leaf.text;
+      } else if (nodeId === "start") {
+        pillEl.textContent = tree.pill;
+        questionEl.textContent = tree.label;
+        optionsEl.innerHTML = "";
+        answerCardEl.classList.add("hidden");
+        tree.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.className = "btn btn-primary";
+          btn.textContent = opt.label;
+          btn.onclick = () => {
+            history.push(opt.next);
+            render();
+          };
+          optionsEl.appendChild(btn);
+        });
+      } else {
+        const node = nodes[nodeId];
+        pillEl.textContent = node.pill;
+        questionEl.textContent = node.label;
+        optionsEl.innerHTML = "";
+        answerCardEl.classList.add("hidden");
+        node.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.className = "btn";
+          btn.textContent = opt.label;
+          btn.onclick = () => {
+            history.push(opt.next);
+            render();
+          };
+          optionsEl.appendChild(btn);
+        });
+      }
+
+      breadcrumbsEl.textContent = "Path: " + history.join(" → ");
+      backBtn.disabled = history.length <= 1;
+    }
+
+    backBtn.onclick = () => {
+      if (history.length > 1) {
+        history.pop();
+        render();
+      }
+    };
+
+    restartBtn.onclick = () => {
+      history = ["start"];
+      render();
+    };
+
+    render();
+  </script>
+</body>
+</html>

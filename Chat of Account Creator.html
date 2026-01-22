@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Commerce Counts · Ecommerce COA Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --cc-green: #14532d;
+      --cc-green-soft: #ecfdf5;
+      --cc-gold: #b45309;
+      --cc-teal: #0f766e;
+      --cc-bg: #f6f7fb;
+      --cc-surface: #ffffff;
+      --cc-border: #e5e7eb;
+      --cc-text: #111827;
+      --cc-muted: #6b7280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--cc-bg);
+      color: var(--cc-text);
+      padding: 16px;
+    }
+    .app {
+      max-width: 980px;
+      margin: 0 auto 32px;
+      background: var(--cc-surface);
+      border-radius: 12px;
+      border-top: 4px solid var(--cc-teal);
+      box-shadow: 0 8px 24px rgba(15,23,42,.08);
+      padding: 18px 20px 22px;
+    }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+    .brand-left { display: flex; align-items: center; gap: 14px; }
+    .brand-logo {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--cc-green);
+      line-height: 1.1;
+    }
+    .brand-sub {
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--cc-gold);
+    }
+    .brand-tagline {
+      font-size: 11px;
+      color: var(--cc-muted);
+      text-align: right;
+    }
+    h1 {
+      font-size: 19px;
+      margin: 10px 0 4px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--cc-muted);
+      margin-bottom: 14px;
+    }
+    .step-pill {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fefce8;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      margin-bottom: 8px;
+    }
+    .section {
+      margin-bottom: 16px;
+      padding: 12px 12px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--cc-border);
+      background: #f9fafb;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .section-help {
+      font-size: 12px;
+      color: var(--cc-muted);
+      margin-bottom: 8px;
+    }
+    label {
+      font-size: 12px;
+      display: block;
+      margin-bottom: 4px;
+      color: var(--cc-text);
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--cc-border);
+      font-size: 13px;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+    .row > div { flex: 1 1 160px; }
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--cc-green-soft);
+      color: var(--cc-green);
+      border: 1px solid #bbf7d0;
+      margin-left: 4px;
+    }
+    .btn {
+      border-radius: 999px;
+      border: 1px solid var(--cc-border);
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      background: #f9fafb;
+      color: var(--cc-text);
+      transition: all .15s ease;
+    }
+    .btn:hover { background: #eef2ff; border-color: var(--cc-teal); }
+    .btn-primary {
+      background: var(--cc-teal);
+      border-color: var(--cc-teal);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #0d5f59; }
+    .btn-small { font-size: 11px; padding: 4px 9px; }
+    .channels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .chip {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--cc-border);
+      font-size: 11px;
+      cursor: pointer;
+      background: #f9fafb;
+      color: var(--cc-muted);
+    }
+    .chip.active {
+      background: var(--cc-green-soft);
+      border-color: var(--cc-teal);
+      color: var(--cc-green);
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid var(--cc-border);
+      padding: 6px 8px;
+      text-align: left;
+    }
+    thead { background: #f3f4f6; }
+    .code {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+    .footer-note {
+      font-size: 10px;
+      color: var(--cc-muted);
+      margin-top: 10px;
+      text-align: right;
+    }
+    .hint {
+      font-size: 11px;
+      color: var(--cc-muted);
+      margin-top: 4px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="brand-header">
+    <div class="brand-left">
+      <!-- ensure this file sits next to the HTML: Commerce-Counts-logo.jpg -->
+      <img src="Commerce-Counts-logo.jpg" alt="Commerce Counts logo" class="brand-logo">
+      <div>
+        <div class="brand-name">Commerce Counts</div>
+        <div class="brand-sub">BOOKKEEPING &amp; TAX</div>
+      </div>
+    </div>
+    <div class="brand-tagline">
+      Ecommerce COA Builder<br>
+      Guided setup for multi‑channel sellers
+    </div>
+  </div>
+
+  <h1>Custom Ecommerce Chart of Accounts Builder</h1>
+  <div class="subtitle">
+    Answer a few questions and generate a starter COA you can copy into QuickBooks, Xero, or Excel.
+  </div>
+
+  <!-- STEP 1: BUSINESS & CHANNELS -->
+  <div class="section">
+    <div class="step-pill">Step 1 · Business & Channels</div>
+    <div class="two-col">
+      <div>
+        <label>Business name (optional)</label>
+        <input type="text" id="businessName" placeholder="e.g., Commerce Counts Client, LLC">
+      </div>
+      <div>
+        <label>Accounting platform</label>
+        <select id="platform">
+          <option value="quickbooks">QuickBooks</option>
+          <option value="xero">Xero</option>
+          <option value="generic">Spreadsheet / Other</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:10px;">
+      <label>Where do you sell? <span class="tag">Choose all that apply</span></label>
+      <div class="channels" id="channelChips">
+        <div class="chip" data-id="amazon">Amazon</div>
+        <div class="chip" data-id="ebay">eBay</div>
+        <div class="chip" data-id="shopify">Shopify</div>
+        <div class="chip" data-id="walmart">Walmart</div>
+        <div class="chip" data-id="etsy">Etsy</div>
+        <div class="chip" data-id="other">Other / Wholesale / In‑person</div>
+      </div>
+    </div>
+    <div class="hint">
+      Tip: COA will automatically add revenue, fee, and clearing accounts for selected channels.
+    </div>
+  </div>
+
+  <!-- STEP 2: DETAIL PREFERENCES -->
+  <div class="section">
+    <div class="step-pill">Step 2 · Detail Level</div>
+    <div class="two-col">
+      <div>
+        <label>How detailed do you want your COA?</label>
+        <select id="detailLevel">
+          <option value="basic">Basic (lean set)</option>
+          <option value="standard" selected>Standard (recommended)</option>
+          <option value="detailed">Detailed (more accounts per channel)</option>
+        </select>
+      </div>
+      <div>
+        <label>Track advertising by channel?</label>
+        <select id="trackAds">
+          <option value="no">No, one Advertising account is fine</option>
+          <option value="yes">Yes, separate Amazon / Meta / Google / etc.</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint">
+      You can always start simple and add more accounts later as you grow.
+    </div>
+  </div>
+
+  <!-- STEP 3: GENERATE -->
+  <div class="section">
+    <div class="step-pill">Step 3 · Generate COA</div>
+    <div class="row" style="align-items:center; margin-bottom:6px;">
+      <div style="flex:0 0 auto;">
+        <button class="btn btn-primary" id="generateBtn">Generate COA</button>
+      </div>
+      <div class="hint">
+        After generating, scroll down to copy the table into Excel or import into your accounting software.
+      </div>
+    </div>
+
+    <div id="resultInfo" class="section-help" style="display:none;"></div>
+
+    <div id="coaTableWrap" style="margin-top:8px; display:none;">
+      <table id="coaTable">
+        <thead>
+          <tr>
+            <th style="width:70px;">Acct #</th>
+            <th>Account name</th>
+            <th style="width:110px;">Type</th>
+            <th>Description</th>
+            <th style="width:120px;">Channel / notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="hint">
+        Tip: Select the table, copy, and paste into Excel/Google Sheets. Then import to QuickBooks/Xero using their COA import tool.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Created by Commerce Counts · Educational only, not tax or legal advice.
+  </div>
+</div>
+
+<script>
+  // basic channel state
+  const selectedChannels = new Set();
+
+  document.querySelectorAll("#channelChips .chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const id = chip.dataset.id;
+      if (selectedChannels.has(id)) {
+        selectedChannels.delete(id);
+        chip.classList.remove("active");
+      } else {
+        selectedChannels.add(id);
+        chip.classList.add("active");
+      }
+    });
+  });
+
+  const baseAccounts = [
+    // Assets
+    {no:1010, name:"Checking Account", type:"Asset", desc:"Primary operating bank account"},
+    {no:1020, name:"Savings Account", type:"Asset", desc:"Reserve or tax savings account"},
+    {no:1110, name:"Accounts Receivable", type:"Asset", desc:"Customer invoices not yet paid"},
+    {no:1200, name:"Inventory", type:"Asset", desc:"Products on hand available for sale"},
+    {no:1300, name:"Prepaid Expenses", type:"Asset", desc:"Insurance or subscriptions paid in advance"},
+    {no:1500, name:"Fixed Assets", type:"Asset", desc:"Long‑term equipment, furniture, computers"},
+    {no:1550, name:"Accumulated Depreciation", type:"Asset", desc:"Contra‑asset tracking depreciation"},
+    // Liabilities
+    {no:2100, name:"Accounts Payable", type:"Liability", desc:"Amounts owed to vendors and suppliers"},
+    {no:2200, name:"Credit Card Payable", type:"Liability", desc:"Business credit card balances"},
+    {no:2300, name:"Sales Tax Payable", type:"Liability", desc:"Sales tax collected and owed to tax agencies"},
+    {no:2400, name:"Payroll Tax Payable", type:"Liability", desc:"Payroll taxes withheld and due"},
+    {no:2500, name:"Notes Payable", type:"Liability", desc:"Loans and formal debt obligations"},
+    // Equity
+    {no:3000, name:"Owner Contribution", type:"Equity", desc:"Owner or investor funds contributed"},
+    {no:3100, name:"Retained Earnings", type:"Equity", desc:"Cumulative profits kept in the business"},
+    {no:3200, name:"Owner Draw", type:"Equity", desc:"Owner withdrawals for personal use"},
+    // Generic income / COGS / expenses (will add channel‑specific below)
+    {no:4200, name:"Shipping Income", type:"Income", desc:"Shipping charged to customers"},
+    {no:4300, name:"Sales Returns & Allowances", type:"Income", desc:"Refunds and discounts given to customers"},
+    {no:4400, name:"Other Income", type:"Income", desc:"Non‑core income (interest, affiliate, misc.)"},
+    {no:5000, name:"Cost of Goods Sold – Product", type:"COGS", desc:"Direct cost of inventory sold"},
+    {no:5200, name:"Shipping & Fulfillment – COGS", type:"COGS", desc:"Direct shipping/fulfillment tied to orders"},
+    {no:5300, name:"Packaging Materials", type:"COGS", desc:"Boxes, tape, inserts tied to shipped orders"},
+    {no:6000, name:"Salaries & Wages", type:"Expense", desc:"Employee compensation"},
+    {no:6100, name:"Payroll Taxes & Benefits", type:"Expense", desc:"Employer payroll taxes and benefits"},
+    {no:6200, name:"Rent & Facilities", type:"Expense", desc:"Warehouse, office, storage rent"},
+    {no:6300, name:"Utilities", type:"Expense", desc:"Electricity, internet, phone, water"},
+    {no:6400, name:"Marketing & Advertising", type:"Expense", desc:"Paid advertising and marketing spend"},
+    {no:6500, name:"Fulfillment & Shipping – Outbound", type:"Expense", desc:"Shipping platforms, postage tools"},
+    {no:6600, name:"Platform Fees", type:"Expense", desc:"Monthly ecommerce platform subscriptions"},
+    {no:6700, name:"Payment Processing Fees", type:"Expense", desc:"Merchant and gateway fees"},
+    {no:6800, name:"Software & Subscriptions", type:"Expense", desc:"Non‑platform software tools"},
+    {no:6900, name:"Professional Services", type:"Expense", desc:"Bookkeeper, tax, legal, consulting"},
+    {no:7000, name:"Office Supplies & Small Equipment", type:"Expense", desc:"Everyday office items"},
+    {no:7100, name:"Insurance", type:"Expense", desc:"Business, liability, property coverage"},
+    {no:7200, name:"Travel & Meals", type:"Expense", desc:"Business travel and client meals"},
+    {no:7300, name:"Depreciation", type:"Expense", desc:"Depreciation expense on fixed assets"},
+    {no:7400, name:"Miscellaneous Expenses", type:"Expense", desc:"Other small expenses not elsewhere"}
+  ];
+
+  const channelMeta = {
+    amazon:  {label:"Amazon",  revNo:4100, revName:"Amazon Revenue",         clearNo:1105, feeNo:5100, feeName:"Amazon Referral Fees"},
+    ebay:    {label:"eBay",    revNo:4110, revName:"eBay Revenue",           clearNo:1106, feeNo:5120, feeName:"eBay Marketplace Fees"},
+    shopify: {label:"Shopify", revNo:4120, revName:"Shopify Revenue",       clearNo:1107, feeNo:5110, feeName:"Shopify Processing Fees"},
+    walmart: {label:"Walmart", revNo:4130, revName:"Walmart Revenue",       clearNo:1108, feeNo:5130, feeName:"Walmart Marketplace Fees"},
+    etsy:    {label:"Etsy",    revNo:4140, revName:"Etsy Revenue",          clearNo:1109, feeNo:5140, feeName:"Etsy Marketplace Fees"},
+    other:   {label:"Other",   revNo:4190, revName:"Other Channel Revenue", clearNo:null, feeNo:5150, feeName:"Other Channel Fees"}
+  };
+
+  function buildCoA() {
+    const detail = document.getElementById("detailLevel").value;
+    const trackAds = document.getElementById("trackAds").value;
+    const platform = document.getElementById("platform").value;
+    const bizName = document.getElementById("businessName").value.trim();
+
+    let rows = [...baseAccounts];
+
+    // For each selected channel, add Revenue, Clearing, Fee COGS
+    selectedChannels.forEach(id => {
+      const meta = channelMeta[id];
+      if (!meta) return;
+
+      rows.push({
+        no: meta.revNo,
+        name: meta.revName,
+        type: "Income",
+        desc: `Gross product sales through ${meta.label}`
+      });
+
+      if (detail !== "basic" && meta.clearNo) {
+        rows.push({
+          no: meta.clearNo,
+          name: `${meta.label} Clearing`,
+          type: "Asset",
+          desc: `Temporary holding account for ${meta.label} payouts (net of fees)`
+        });
+      }
+
+      rows.push({
+        no: meta.feeNo,
+        name: meta.feeName,
+        type: "COGS",
+        desc: `Per‑order marketplace or processing fees for ${meta.label}`
+      });
+    });
+
+    // Optional: detailed advertising by channel
+    if (trackAds === "yes") {
+      let base = 6410;
+      ["Amazon","Meta / Facebook","Google","TikTok"].forEach(label => {
+        rows.push({
+          no: base,
+          name: `Advertising – ${label}`,
+          type: "Expense",
+          desc: `Paid ads on ${label}`
+        });
+        base += 1;
+      });
+    }
+
+    // If basic, remove some detail accounts
+    if (detail === "basic") {
+      rows = rows.filter(r => ![5300, 6500, 7300].includes(r.no));
+    }
+
+    // sort by account number
+    rows.sort((a,b) => a.no - b.no);
+
+    // render
+    const tbody = document.querySelector("#coaTable tbody");
+    tbody.innerHTML = "";
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="code">${r.no}</td>
+        <td>${r.name}</td>
+        <td>${r.type}</td>
+        <td>${r.desc}</td>
+        <td>${buildNotes(r)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("coaTableWrap").style.display = "block";
+    const info = document.getElementById("resultInfo");
+    info.style.display = "block";
+    info.textContent =
+      `Generated ${rows.length} accounts${bizName ? " for " + bizName : ""}` +
+      ` · Platform: ${platform === "quickbooks" ? "QuickBooks" : platform === "xero" ? "Xero" : "Generic"}.`;
+  }
+
+  function buildNotes(row) {
+    // simple notes based on account number ranges or names
+    if (row.no >= 4100 && row.no < 4200) {
+      return "Channel revenue";
+    }
+    if (row.no >= 1105 && row.no <= 1109) {
+      return "Use with payout integration / clearing";
+    }
+    if (row.no >= 5100 && row.no < 5200) {
+      return "Per‑order marketplace/processing fees (COGS)";
+    }
+    if (row.no === 6400) {
+      return "Top‑level advertising; add subs if needed";
+    }
+    if (row.no >= 6410 && row.no < 6420) {
+      return "Ad spend by platform";
+    }
+    if (row.no === 5000) return "Link to inventory system";
+    if (row.no === 1200) return "Physical stock on hand";
+    return "";
+  }
+
+  document.getElementById("generateBtn").addEventListener("click", buildCoA);
+</script>
+</body>
+</html>
